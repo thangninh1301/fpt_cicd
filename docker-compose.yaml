@@ -5,12 +5,12 @@ services:
 #    container_name: postgres
     image: postgres:14.1-alpine
     restart: always
-    environment:
-      - POSTGRES_USER=postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-#    env_file:
-#      - ./env/pg.env
+#    environment:
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: postgres
+#      POSTGRES_DB: postgres
+    env_file:
+      - ./env/pg.env
     volumes:
       - db:/var/lib/postgresql/data
     networks:

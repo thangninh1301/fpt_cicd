@@ -11,9 +11,13 @@
 #        state: present
     - name: Login DockerHub
       shell: docker login -u "{{DOCKER_HUB_USERNAME}}" -p "{{DOCKER_HUB_PASSWORD}}"
-    - name: Copy file
+    - name: Copy docker-compose file
       copy:
         src: docker-compose.yaml
+        dest: /home/ubuntu/
+    - name: Copy env file
+      copy:
+        src: /env/pg.env
         dest: /home/ubuntu/
     - name: Restart docker-compose
       shell: |
