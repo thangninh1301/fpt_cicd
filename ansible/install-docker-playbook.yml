@@ -1,0 +1,39 @@
+---
+- hosts: master
+  remote_user: ubuntu
+  become: yes
+  tasks:
+    - name: Check If Docker Is Installed
+      command: docker --version
+      register: docker_valid
+      ignore_errors: yes
+
+    - name: Debug Docker Output
+      debug:
+        var: docker_valid
+
+    - name: Install Docker using role
+      import_role:
+        name: docker_install
+      when: docker_valid.failed
+
+    - name: Install docker-compose from official github repo
+      get_url:
+        url : https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: 'u+x,g+x'
+#    - name: Login DockerHub
+#      shell: docker login -u "{{DOCKER_HUB_USERNAME}}" -p "{{DOCKER_HUB_PASSWORD}}"
+#    - name: Copy file
+#      copy:
+#        src: docker-compose.yaml
+#        dest: /home/ubuntu/
+#    - name: Restart docker-compose
+#      shell: |
+#          docker-compose stop
+#          docker-compose rm -f
+#          docker-compose pull
+#          docker-compose up -d
+# ansible-playbook playbook.yml --private-key=~/Documents/fpt/thangnd45.pem  -i hosts
+...
+  
