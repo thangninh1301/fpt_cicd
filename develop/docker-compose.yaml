@@ -25,7 +25,7 @@ services:
       DB_URL: postgres
       DB_PORT: 5432
     env_file:
-      - ./env/pg.env
+      - pg.env
     ports:
       - '8080:8080'
     networks:
