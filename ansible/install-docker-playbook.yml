@@ -34,6 +34,6 @@
 #          docker-compose rm -f
 #          docker-compose pull
 #          docker-compose up -d
-# ansible-playbook playbook.yml --private-key=~/Documents/fpt/thangnd45.pem  -i hosts
+# ansible-playbook install-docker-playbook.yml --private-key=~/Documents/fpt/thangnd45.pem  -i hosts
 ...
   
