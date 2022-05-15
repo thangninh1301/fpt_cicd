@@ -1,9 +1,8 @@
 pipeline {
     agent any
     environment {
-//         PRIVATE_KEY            = credentials('privatekey')
-        DOCKER_IMAGE = "thang13199/nginx-${GIT_BRANCH.tokenize('/').pop()}"
-        DOCKERHUB_CREDENTIALS = 'docker-hub-account'
+        DOCKER_IMAGE = "thang13199/server-${GIT_BRANCH.tokenize('/').pop()}"
+//        DOCKERHUB_CREDENTIALS = credentials('docker-hub-account')
     }
     stages {
         stage("Build") {
@@ -11,12 +10,11 @@ pipeline {
                 timeout(time: 10, unit: 'MINUTES')
             }
             environment {
-                DOCKERHUB_CREDENTIALS = credentials('docker-hub-account')
                 DOCKER_TAG = "${GIT_BRANCH.tokenize('/').pop()}-${GIT_COMMIT.substring(0, 7)}"
             }
             steps {
                 sh '''
-                    docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+                    docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ./app
                     docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest
                     docker image ls | grep ${DOCKER_IMAGE}'''
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-account', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
@@ -41,7 +39,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-account', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
                     ansiblePlaybook(
                             credentialsId: 'fsoft-ctc',
-                            playbook: 'playbook.yml',
+                            playbook: 'install-docker-playbook.yml',
                             inventory: 'hosts',
                             become: 'yes',
                             extraVars: [
@@ -62,7 +60,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-account', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
                     ansiblePlaybook(
                             credentialsId: 'fsoft-ctc',
-                            playbook: 'develop/playbook.yml',
+                            playbook: 'develop/install-docker-playbook.yml',
                             inventory: 'hosts',
                             become: 'yes',
                             extraVars: [
@@ -73,14 +71,5 @@ pipeline {
                 }
             }
         }
-
-//        post {
-//            success {
-//                sh 'echo "SUCCESS FULL"'
-//            }
-//            failure {
-//                sh 'echo "FAILED"'
-//            }
-//        }
     }
 }

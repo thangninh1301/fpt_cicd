@@ -1,6 +1,44 @@
-version: "3.3"
+version: '3.8'
+
 services:
-  app:
-    image: thang13199/nginx-develop:latest
+  postgres:
+#    container_name: postgres
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+#    env_file:
+#      - ./env/pg.env
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - backend
+#    deploy:
+#      mode: replicated
+#      replicas: 3
+  nodejs:
+#    container_name: nodejs_container
+    image: thang13199/server-develop:latest
+    environment:
+      DB_URL: postgres
+      DB_PORT: 5432
+    env_file:
+      - ./env/pg.env
     ports:
-      - "80:80"
+      - '8080:8080'
+    networks:
+      - backend
+    volumes:
+      - /app/node_modules
+      - ./app/:/app/
+#    deploy:
+#      mode: replicated
+#      replicas: 3
+networks:
+  backend:
+    driver: bridge
+#    driver: overlay
+volumes:
+  db:
