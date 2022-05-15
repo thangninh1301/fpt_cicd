@@ -17,7 +17,7 @@
         dest: /home/ubuntu/
     - name: Copy env file
       copy:
-        src: /env/pg.env
+        src: ../env/pg.env
         dest: /home/ubuntu/
     - name: Restart docker-compose
       shell: |
