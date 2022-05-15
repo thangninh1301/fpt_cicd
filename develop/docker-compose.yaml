@@ -10,7 +10,7 @@ services:
 #      POSTGRES_PASSWORD: postgres
 #      POSTGRES_DB: postgres
     env_file:
-      - ./env/pg.env
+      - ./pg.env
     volumes:
       - db:/var/lib/postgresql/data
     networks:
@@ -25,7 +25,7 @@ services:
       DB_URL: postgres
       DB_PORT: 5432
     env_file:
-      - pg.env
+      - ./pg.env
     ports:
       - '8080:8080'
     networks:
