@@ -1,21 +1,23 @@
-resource "aws_instance" "public_production" {
-  ami = var.image_id
-  instance_type = var.instance_type
-  subnet_id = aws_subnet.public_subnet[0].id
+resource "aws_instance" "public_instance" {
+  count           = 3
+  ami             = var.image_id
+  instance_type   = var.instance_type
+  subnet_id       = aws_subnet.public_subnet[count.index % length(aws_subnet.public_subnet)].id
   security_groups = [aws_security_group.private.id]
-  key_name = var.key_name
-  tags = {
-    Name = "public node_1"
+  key_name        = var.key_name
+  tags            = {
+    Name = var.instance_name[count.index]
   }
 }
-#resource "aws_instance" "private_node_1" {
-#  ami = var.image_id
-#  instance_type = var.instance_type
-#  subnet_id = aws_subnet.private_subnet[count.index]
-#  security_groups = [aws_security_group.private.id]
-#  key_name = var.key_name
-#  tags = {
-#    Name = "node_2"
-#  }
-#}
+resource "aws_instance" "private_instance" {
+  count           = 1
+  ami             = var.image_id
+  instance_type   = var.instance_type
+  subnet_id       = aws_subnet.private_subnet[count.index % length(aws_subnet.private_subnet)].id
+  security_groups = [aws_security_group.private.id]
+  key_name        = var.key_name
+  tags            = {
+    Name = "private instance"
+  }
+}
 

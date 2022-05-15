@@ -42,3 +42,8 @@ variable "key_name" {
   type        = string
   default     = "thangnd45"
 }
+
+variable "instance_name" {
+  type    = list(string)
+  default = ["jenkins", "production", "staging"]
+}
