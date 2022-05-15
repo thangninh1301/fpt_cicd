@@ -5,8 +5,8 @@ services:
 #    container_name: postgres
     image: postgres:14.1-alpine
     restart: always
-    environment:
-#      - POSTGRES_USER=postgres
+#    environment:
+#      POSTGRES_USER: postgres
 #      POSTGRES_PASSWORD: postgres
 #      POSTGRES_DB: postgres
     env_file:
@@ -30,9 +30,9 @@ services:
       - '8080:8080'
     networks:
       - backend
-    volumes:
-      - /app/node_modules
-      - ./app/:/app/
+#    volumes:
+#      - /app/node_modules
+#      - ./app/:/app/
 #    deploy:
 #      mode: replicated
 #      replicas: 3

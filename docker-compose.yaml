@@ -30,9 +30,9 @@ services:
       - '8080:8080'
     networks:
       - backend
-    volumes:
-      - /app/node_modules
-      - ./app/:/app/
+#    volumes:
+#      - /app/node_modules
+#      - ./app/:/app/
 #    deploy:
 #      mode: replicated
 #      replicas: 3
