@@ -3,7 +3,7 @@ resource "aws_vpc" "vpc" {
   enable_dns_hostnames = true
 
   tags = {
-    "Name" = "custom"
+    "Name" = "thangnd45"
   }
 }
 
@@ -25,6 +25,7 @@ resource "aws_subnet" "public_subnet" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.public_subnet[count.index]
   availability_zone = var.availability_zone[count.index % length(var.availability_zone)]
+  map_public_ip_on_launch = "true"
 
   tags = {
     "Name" = "public-subnet"
@@ -35,7 +36,7 @@ resource "aws_internet_gateway" "ig" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    "Name" = "custom"
+    "Name" = "thangnd45"
   }
 }
 
@@ -60,6 +61,10 @@ resource "aws_route_table_association" "public_association" {
 
 resource "aws_eip" "nat" {
   vpc = true
+
+  tags = {
+    "Name" = "thangnd45"
+  }
 }
 
 resource "aws_nat_gateway" "public" {
